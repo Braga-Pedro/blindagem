@@ -1,0 +1,12 @@
+---
+description: Contrato de handoff com o Claude neste worktree
+alwaysApply: true
+---
+
+# Handoff Claude → Cursor
+
+Quando existir `.handoff/plan.md` com `status: ready`, ele é o contrato desta sessão:
+o Claude planejou, você executa. Não replaneje, não amplie o escopo, não dê push.
+O procedimento completo está na skill `executar-plano`.
+
+Use os comandos do bloco "Ambiente" do plano (tipicamente `./mvnw ...`).

@@ -52,6 +52,16 @@ GitHub Actions (`.github/workflows/ci.yml`) roda `./mvnw -B verify` em push/PR p
 
 Commits seguem Conventional Commits em português (ex: `chore: esqueleto inicial do projeto`). Prefixos usados: `chore`, `feat`, `fix`, `test`, `docs`, `refactor`.
 
+## Handoff Claude ↔ Cursor
+
+Fluxo de dois agentes no mesmo worktree: Claude planeja e revisa, Cursor executa. Contrato
+em `.handoff/` (`plan.md` → `exec.md` → `review.md`), instalado por
+`scripts/handoff/install.sh` (roda sozinho via `orca.yaml` ao criar um worktree). Skills:
+`.claude/skills/handoff/SKILL.md` (Claude) e `.cursor/skills/executar-plano/SKILL.md`
+(Cursor) — ambas materializadas a partir de `scripts/handoff/templates/`, não versionadas
+diretamente. Use `/handoff` para despachar um plano aprovado ou revisar a execução do
+Cursor.
+
 ## Estado atual do projeto
 
 Esqueleto inicial apenas — sem controllers, services ou entidades de domínio ainda. Ao propor código novo, não assumir camadas ou padrões arquiteturais que ainda não existem no repositório; perguntar antes de introduzir uma convenção nova (ex: separação por camada vs. por feature).

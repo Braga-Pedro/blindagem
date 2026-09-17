@@ -1,0 +1,7 @@
+# Hooks de repositorio lidos pelo Orca.
+#
+# `setup` roda quando o Orca cria um worktree (politica run-by-default) e
+# instala o mecanismo de handoff Claude <-> Cursor (skills, rule e hook).
+scripts:
+  setup: |
+    ./scripts/handoff/install.sh
