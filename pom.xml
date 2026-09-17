@@ -8,7 +8,7 @@
 		<version>4.1.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>br.com.bragapedro</groupId>
+	<groupId>io.github.bragapedro</groupId>
 	<artifactId>blindagem</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>blindagem</name>
