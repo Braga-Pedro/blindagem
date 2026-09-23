@@ -34,6 +34,45 @@ io.github.bragapedro.blindagem
 
 `groupId` no Maven segue a mesma convenção (domínio reverso baseado no usuário GitHub, já que não há domínio próprio registrado).
 
+## Arquitetura e convenções de código
+
+Convenções a seguir a partir do primeiro controller/service/entidade — ainda não há código de
+domínio no repositório para validar contra elas, mas ficam fixadas aqui antes desse código
+aparecer para não ter que corrigir padrão depois.
+
+- **Pacote por feature**, não por camada técnica: `plano/`, `exposicaodados/`,
+  `exposicaovoz/`, `corpus/` (dentro do pacote base), cada um com seu próprio
+  controller/service/repository internos.
+- **Injeção de dependência por construtor**, nunca `@Autowired` em campo.
+- **DTOs como `record`** (Java 21); nunca expor `@Entity` do JPA direto no controller.
+- **`@Transactional` só na camada de service**, nunca em controller ou repository.
+- **Bean Validation** (`spring-boot-starter-validation`) nos DTOs de entrada.
+- **Busca sobre o corpus oficial (pgvector)** isolada atrás de uma interface própria
+  (`*Port`/`*Gateway`) quando essa feature começar — não implementar direto no service, já
+  que é a peça com mais chance de trocar de provedor/implementação.
+
+## Fluxo de desenvolvimento (branch, PR)
+
+- **Branch base para tudo:** `dev` — não abrir branch de trabalho a partir de `main`
+  diretamente (exceção: hotfix urgente de produção, fora do fluxo padrão).
+- **Nome de branch:** `<tipo>/<descricao-curta-em-kebab-case>`, reaproveitando os tipos já
+  usados nos commits (`feat`, `fix`, `chore`, `docs`, `refactor`, `test`). Ex.:
+  `feat/geracao-plano-priorizado`, `fix/validacao-dto-endereco`. Com issue vinculada (ainda
+  não obrigatório neste projeto): `<tipo>/<numero>-<descricao>`.
+- **PR de branch de trabalho → `dev`:** título em Conventional Commits (vira a mensagem do
+  squash-merge). Corpo com `## Resumo` (bullets) e `## Test plan` (checklist).
+- **Merge:** squash and merge, para manter `dev`/`main` com histórico linear.
+- **Promoção `dev` → `main`:** PR aberto em momento oportuno, quando o que acumulou em `dev`
+  estiver validado em uso. Título descritivo do lote, não precisa seguir um único tipo
+  Conventional Commit.
+
+## Guardrails do Claude Code
+
+- **Hook `protect-files.sh`** (`PreToolUse`, em `.claude/hooks/`) bloqueia edição de
+  arquivos sensíveis (CI, segredos, certificados) — ver `.claude/settings.json`.
+- **Agente `architecture-guardian`** (`.claude/agents/`) audita, sob demanda, se o código
+  escrito respeita as convenções de camada/feature acima — só relatório, não bloqueia nada.
+
 ## Comandos
 
 ```bash
@@ -46,7 +85,7 @@ Health check em `/actuator/health` quando a aplicação está no ar.
 
 ## CI
 
-GitHub Actions (`.github/workflows/ci.yml`) roda `./mvnw -B verify` em push/PR para `main`, com JDK 21 (Temurin).
+GitHub Actions (`.github/workflows/ci.yml`) roda `./mvnw -B verify` em push/PR para `main` e `dev`, com JDK 21 (Temurin).
 
 ## Convenções de commit
 
@@ -64,4 +103,4 @@ Cursor.
 
 ## Estado atual do projeto
 
-Esqueleto inicial apenas — sem controllers, services ou entidades de domínio ainda. Ao propor código novo, não assumir camadas ou padrões arquiteturais que ainda não existem no repositório; perguntar antes de introduzir uma convenção nova (ex: separação por camada vs. por feature).
+Esqueleto inicial apenas — sem controllers, services ou entidades de domínio ainda. A seção "Arquitetura e convenções de código" acima já fixa o padrão a seguir quando esse código começar a existir; não há nada em produção ainda para validar contra ela.
