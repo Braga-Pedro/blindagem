@@ -31,3 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Claude Code / handoff ###
+# Materializados por scripts/handoff/install.sh a partir de scripts/handoff/templates/ —
+# a fonte de verdade fica nos templates, não faz sentido versionar a cópia.
+.claude/settings.local.json
+.claude/skills/handoff/
+.cursor/rules/handoff.mdc
+.cursor/skills/executar-plano/
+__pycache__/
